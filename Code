@@ -1,0 +1,89 @@
+#define IN1 8
+#define IN2 9
+#define ENA 5
+#define MOISTURE_PIN A0
+
+int motorSpeed = 80;
+int startThreshold;
+int stopThreshold;
+
+String cropName;
+
+void setup() {
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+
+  Serial.begin(9600);
+
+  Serial.println("SMART IRRIGATION SYSTEM");
+  Serial.println("Enter crop name");
+
+  while(!Serial.available()){}
+
+  cropName = Serial.readStringUntil('\n');
+  cropName.trim();
+
+  // ---- Crop Selection ----
+
+  if(cropName == "cotton"){
+    startThreshold = 600;
+    stopThreshold = 480;
+  }
+
+  else if(cropName == "wheat"){
+    startThreshold = 620;
+    stopThreshold = 500;
+  }
+
+  else if(cropName == "rice"){
+    startThreshold = 550;
+    stopThreshold = 420;
+  }
+
+  else if(cropName == "maize"){
+    startThreshold = 610;
+    stopThreshold = 490;
+  }
+
+  else if(cropName == "tomato"){
+    startThreshold = 590;
+    stopThreshold = 470;
+  }
+
+  else{
+    Serial.println("Unknown crop. Default: cotton");
+    startThreshold = 600;
+    stopThreshold = 480;
+  }
+
+  Serial.print("Crop Selected: ");
+  Serial.println(cropName);
+}
+
+void loop() {
+
+  int moistureValue = analogRead(MOISTURE_PIN);
+
+  Serial.print("Moisture Value: ");
+  Serial.println(moistureValue);
+
+  if(moistureValue > startThreshold){
+
+    Serial.println("Soil Dry -> Pump ON");
+
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    analogWrite(ENA, motorSpeed);
+
+    while(analogRead(MOISTURE_PIN) > stopThreshold){
+      delay(1000);
+    }
+
+    analogWrite(ENA, 0);
+    Serial.println("Target Moisture Reached -> Pump OFF");
+  }
+
+  delay(2000);
+}
