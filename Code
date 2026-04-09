@@ -87,3 +87,25 @@ void loop() {
 
   delay(2000);
 }
+
+Serial Monitor Readings
+Enter Crop Name
+Cotton
+Current moisture 990
+Soil Dry -> Pump ON
+Current Moisture 950
+Current Moisture 923
+Current Moisture 849
+Current Moisture 805
+Current Moisture 765
+Current Moisture 743
+Current Moisture 644
+Current Moisture 599
+Current Moisture 519
+Current Moisture 473
+Target Moisture Reached -> Pump OFF
+Current Moisture 473
+Current Moisture 473
+Current Moisture 475
+Current Moisture 480
+Current Moisture 482
